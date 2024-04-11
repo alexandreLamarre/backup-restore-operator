@@ -3,6 +3,8 @@ set -e
 
 cd $(dirname $0)
 
+export CLUSTER_NAME="backup-restore-operator"
+
 ./build
 ./test
 ./validate
@@ -10,4 +12,7 @@ cd $(dirname $0)
 ./package
 ./chart/test
 ./hull
+# integration tests
+./cleanup-cluster.sh
+./setup-cluster.sh
 ./integration

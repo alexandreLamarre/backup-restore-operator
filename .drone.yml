@@ -10,7 +10,7 @@ steps:
 - name: build
   image: rancher/dapper:v0.6.0
   commands:
-  - export K8S_VERSION_FROM_DRONE="v1.24"
+  - export K8S_VERSION_FROM_CI="v1.24"
   - dapper ci
   volumes:
   - name: docker
@@ -21,7 +21,7 @@ steps:
 - name: build_no_psp
   image: rancher/dapper:v0.6.0
   commands:
-  - export K8S_VERSION_FROM_DRONE="stable"
+  - export K8S_VERSION_FROM_CI="stable"
   - dapper ci
   volumes:
   - name: docker
@@ -129,7 +129,7 @@ steps:
 - name: build
   image: rancher/dapper:v0.6.0
   commands:
-  - export K8S_VERSION_FROM_DRONE="v1.24"
+  - export K8S_VERSION_FROM_CI="v1.24"
   - dapper ci
   volumes:
   - name: docker
@@ -138,7 +138,7 @@ steps:
 - name: build_no_psp
   image: rancher/dapper:v0.6.0
   commands:
-  - export K8S_VERSION_FROM_DRONE="stable"
+  - export K8S_VERSION_FROM_CI="stable"
   - dapper ci
   volumes:
   - name: docker

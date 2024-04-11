@@ -1,0 +1,32 @@
+name: Backup Restore CI
+
+on:
+  push:
+    paths-ignore:
+      - 'docs/**'
+      - '*.md'
+      - '.gitignore'
+      - 'CODEOWNERS'
+      - 'LICENSE'
+
+jobs:
+  build:
+    name : CI
+    runs-on : ubuntu-latest
+    strategy:
+      matrix:
+        K8S_VERSION_FROM_CI : ["v1.24","stable"]
+        include:
+          - platform: linux/amd64
+          - platform: linux/arm64
+    steps:
+      - name : Checkout repository
+        uses : actions/checkout@v4
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3 
+      - name : Setup environment variables
+        run : echo "K8S_VERSION_FROM_CI=${{ matrix.K8S_VERSION_FROM_CI }}" >> $GITHUB_ENV
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3 
+      - name : CI
+        run : make ci
