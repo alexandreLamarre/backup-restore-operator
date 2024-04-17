@@ -4,35 +4,11 @@ function echo_with_time {
     echo "$(date --utc +%Y-%m-%dT%H:%M:%SZ) "$@""
 }
 
-source $(dirname $0)/version
+source ./scripts/version
 
 echo_with_time "INFO - Running $0"
 
-# == Comment out cluster specific setup code for now ==
-
-# cd $(dirname $0)/..
-
-# k3s server --disable servicelb --disable traefik --disable local-storage --disable metrics-server > /tmp/k3s.log 2>&1 &
-# k3s_pid=$!
-
-# export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
-
-# echo_with_time 'Waiting for node to be ready ...'
-# time timeout 300 bash -c 'while ! (k3s kubectl wait --for condition=ready node/$(hostname) 2>/dev/null); do sleep 5; done'
-# time timeout 300 bash -c 'while ! (k3s kubectl --namespace kube-system rollout status --timeout 10s deploy/coredns 2>/dev/null); do sleep 5; done'
-
-# echo_with_time "using kubectl and kubernetes versions:"
-# k3s kubectl version
-
-# k3s kubectl get nodes -o wide --show-labels
-
-# docker image save rancher/backup-restore-operator:$TAG -o /tmp/bro.img
-
-# k3s ctr images import /tmp/bro.img
-
-## == End of cluster specific setup code ==
-
-ls -la /tmp/dist/artifacts
+ls -la ./dist/artifacts
 
 # In case short commit only conists of numbers, it is regarded valid by Helm when packaging
 # Or if a tag is set (if its a (pre) release)
@@ -42,8 +18,8 @@ else
   HELM_CHART_VERSION=$HELM_VERSION_DEV
 fi
 
-helm install rancher-backup-crd /tmp/dist/artifacts/rancher-backup-crd-$HELM_CHART_VERSION.tgz -n cattle-resources-system --create-namespace --wait
-helm install rancher-backup /tmp/dist/artifacts/rancher-backup-$HELM_CHART_VERSION.tgz -n cattle-resources-system --set image.tag=$TAG --set imagePullPolicy=IfNotPresent
+helm install rancher-backup-crd ./dist/artifacts/rancher-backup-crd-$HELM_CHART_VERSION.tgz -n cattle-resources-system --create-namespace --wait
+helm install rancher-backup ./dist/artifacts/rancher-backup-$HELM_CHART_VERSION.tgz -n cattle-resources-system --set image.tag=$TAG --set imagePullPolicy=IfNotPresent
 
 time timeout 300 bash -c 'while ! (kubectl --namespace cattle-resources-system rollout status --timeout 10s deploy/rancher-backup 2>/dev/null); do sleep 5; done'
 
@@ -60,7 +36,7 @@ if [ "$ARCH" = "s390x" ]; then
 fi
 
 #Deploy Minio
-./deploy minio
+./scripts/deploy minio
 
 export POD_NAME=$(kubectl get pods --namespace minio -l "release=minio" -o jsonpath="{.items[0].metadata.name}")
 kubectl port-forward $POD_NAME 9000 --namespace minio &
@@ -93,11 +69,11 @@ for BACKUP in rancherbackups-insecure rancherbackups; do
 
     if [[ $BACKUP = "rancherbackups-insecure" ]]; then
         # Backup without CA / insecure TLS configured
-        ./deploy create-backup-insecure
+        ./scripts/deploy create-backup-insecure
 
         BACKUPRS_NAME="s3-recurring-backup-insecure"
     else
-        ./deploy create-backup
+        ./scripts/deploy create-backup
         BACKUPRS_NAME="s3-recurring-backup"
     fi
 
@@ -129,7 +105,7 @@ done
 # Restore resource with spec.preserveUnknownFields
 # https://github.com/rancher/backup-restore-operator/issues/186
 
-cd ../tests/files/preserve-unknown-fields
+cd ./tests/files/preserve-unknown-fields
 tar cvzf /tmp/preserve-unknown-fields.tar.gz -- *
 cd -
 mc cp --quiet --no-color /tmp/preserve-unknown-fields.tar.gz miniolocal/rancherbackups
@@ -158,7 +134,7 @@ time timeout 60 bash -c 'while ! (kubectl wait --for condition=ready restore.res
 # Restore resource with metadata.deletionGracePeriodSeconds
 # https://github.com/rancher/backup-restore-operator/issues/188
 
-cd ../tests/files/deletion-grace-period-seconds
+cd ./tests/files/deletion-grace-period-seconds
 tar cvzf /tmp/deletion-grace-period-seconds.tar.gz -- *
 cd -
 mc cp --quiet --no-color /tmp/deletion-grace-period-seconds.tar.gz miniolocal/rancherbackups

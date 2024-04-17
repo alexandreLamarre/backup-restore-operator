@@ -34,12 +34,8 @@ const (
 )
 
 var (
-	version = "v0.0.0-dev"
-	commit  = "HEAD"
-	date    = "1970-01-01T00:00:00Z"
-)
-
-var (
+	Version                         = "v0.0.0-dev"
+	GitCommit                       = "HEAD"
 	LocalBackupStorageLocation      = "/var/lib/backups" // local within the pod, this is the mountPath for PVC
 	KubeConfig                      string
 	OperatorPVEnabled               string
@@ -85,7 +81,7 @@ func main() {
 		logrus.Tracef("Loglevel set to [%v]", logrus.TraceLevel)
 	}
 
-	logrus.Infof("Starting backup-restore controller version %s (%s), built at : %s", version, commit, date)
+	logrus.Infof("Starting backup-restore controller version %s (%s)", Version, GitCommit)
 	ctx := signals.SetupSignalContext()
 	restKubeConfig, err := kubeconfig.GetNonInteractiveClientConfig(KubeConfig).ClientConfig()
 	if err != nil {

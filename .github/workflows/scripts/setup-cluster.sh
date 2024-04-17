@@ -2,7 +2,17 @@
 
 set -e
 
-source $(dirname $0)/version
+source ./scripts/version
+
+if [ -z "$CLUSTER_NAME" ]; then
+    echo "CLUSTER_NAME must be specified when setting up a cluster"
+    exit 1
+fi
+
+if [ -z "$K3S_VERSION" ]; then
+  echo "K3S_VERSION must be specified when setting up a cluster, use `k3d version list k3s` to find valid versions"
+  exit 1
+fi
 
 # waits until all nodes are ready
 wait_for_nodes(){
@@ -29,8 +39,8 @@ wait_for_nodes(){
   done
 }
 
-k3d cluster create ${CLUSTER_NAME}
-
+k3d cluster delete ${CLUSTER_NAME} || true
+k3d cluster create ${CLUSTER_NAME} --image "docker.io/rancher/k3s:${K3S_VERSION}"
 
 wait_for_nodes
 

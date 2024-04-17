@@ -10,9 +10,8 @@ if [ "$(uname)" = "Linux" ]; then
     OTHER_LINKFLAGS="-extldflags -static -s"
 fi
 
-LINKFLAGS="-X main.version=$VERSION"
-LINKFLAGS="-X main.commit=$COMMIT $LINKFLAGS"
-LINKFLAGS="-X main.date=$DATE $LINKFLAGS"
+LINKFLAGS="-X main.Version=$VERSION"
+LINKFLAGS="-X main.GitCommit=$COMMIT $LINKFLAGS"
 
 
 ARCHES=( "$ARCH" )

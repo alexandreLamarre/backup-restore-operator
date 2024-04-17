@@ -12,8 +12,6 @@ install_k3d(){
   curl --silent --fail ${K3D_URL} | TAG=${k3dVersion} bash
 }
 
-
-
 install_k3d
 
 k3d version

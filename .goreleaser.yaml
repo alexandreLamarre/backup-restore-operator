@@ -19,11 +19,11 @@ builds:
         - -extldflags
         - -static
         - -s
+        - -X main.Version={{.Version}} -X main.GitCommit={{.Commit}}
       flags:
         - -trimpath
       env:
         - CGO_ENABLED=0
-# same archives as opentelemetry-collector releases
 archives:
     - id: backup-restore-operator
       builds:
