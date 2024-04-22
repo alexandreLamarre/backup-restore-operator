@@ -17,8 +17,11 @@ on:
     - 'LICENSE'
 jobs:
   build:
+    strategy:
+      matrix:
+        os : [ ubuntu-latest, org-rancher-arm64-containers ]
     name : CI
-    runs-on : ubuntu-latest
+    runs-on : ${{ matrix.os }}
     outputs:
       k3sversions: ${{ steps.support.outputs.k3sversions }}
     steps:
@@ -35,16 +38,17 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: bro-build-artifacts
-          path: ./dist/artifacts
+          path: ./dist/artifacts/${{ matrix.os }}
         
   test:
     name : integration-test
     needs : [
       build
     ]
-    runs-on : ubuntu-latest
+    runs-on : ${{ matrix.os }}
     strategy:
       matrix:
+        os : [ ubuntu-latest, org-rancher-arm64-containers ]
         K3S_VERSION : ${{ fromJSON(needs.build.outputs.k3sversions) }}
     steps:
       - name : Checkout repository
@@ -53,7 +57,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: bro-build-artifacts
-          path: ./dist/artifacts
+          path: ./dist/artifacts/${{ matrix.os }}
       - name : Debug
         run : ls -R ./dist/artifacts
       - name: Set up Docker Buildx
