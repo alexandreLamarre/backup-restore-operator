@@ -37,8 +37,8 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: bro-build-artifacts
-          path: ./dist/artifacts/${{ matrix.os }}
+          name: bro-build-artifacts-${{ matrix.os }}
+          path: ./dist/artifacts
         
   test:
     name : integration-test
@@ -56,8 +56,8 @@ jobs:
       - name : Fetch build artifacts
         uses: actions/download-artifact@v4
         with:
-          name: bro-build-artifacts
-          path: ./dist/artifacts/${{ matrix.os }}
+          name: bro-build-artifacts-${{ matrix.os }}
+          path: ./dist/artifacts/
       - name : Debug
         run : ls -R ./dist/artifacts
       - name: Set up Docker Buildx
