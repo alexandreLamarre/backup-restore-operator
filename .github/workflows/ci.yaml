@@ -19,7 +19,10 @@ jobs:
   build:
     strategy:
       matrix:
-        os : [ ubuntu-latest, org-rancher-arm64-containers ]
+        os : [ 
+          ubuntu-latest
+          # org-rancher-arm64-containers
+          ]
     name : CI
     runs-on : ${{ matrix.os }}
     outputs:
@@ -48,7 +51,10 @@ jobs:
     runs-on : ${{ matrix.os }}
     strategy:
       matrix:
-        os : [ ubuntu-latest, org-rancher-arm64-containers ]
+        os : [ 
+          ubuntu-latest
+          # org-rancher-arm64-containers,
+         ]
         K3S_VERSION : ${{ fromJSON(needs.build.outputs.k3sversions) }}
     steps:
       - name : Checkout repository
