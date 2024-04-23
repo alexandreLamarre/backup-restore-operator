@@ -12,7 +12,7 @@ env:
 
 jobs:
   ci :
-    uses: alexandreLamarre/backup-restore-operator/.github/workflows/ci.yml@release/v5.0
+    uses: alexandreLamarre/backup-restore-operator/.github/workflows/ci.yaml@release/v5.0
     permissions:
       content: read
   push:
