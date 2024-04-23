@@ -1,5 +1,8 @@
 name: Backup Restore CI
 
+permissions:
+  contents : read
+
 on:
   push:
     branches:

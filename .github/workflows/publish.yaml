@@ -9,8 +9,16 @@ env:
   REGISTRY: docker.io
   REPO : rancher
 
+
 jobs:
+  ci :
+    uses: rancher/backup-restore/.github/workflows/ci.yml@release/v5.0
+    permissions:
+      content: read
   push:
+    permissions:
+      contents : read
+      id-token: write
     name : Build and push BRO images
     runs-on : ubuntu-latest
     steps:

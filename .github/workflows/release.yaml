@@ -9,7 +9,12 @@ permissions:
   contents: write
 
 jobs:
+  ci:
+    uses: rancher/backup-restore/.github/workflows/ci.yml@release/v5.0
   goreleaser:
+    needs: [
+      ci
+    ]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
