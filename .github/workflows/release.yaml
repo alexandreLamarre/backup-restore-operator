@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   ci:
-    uses: alexandreLamarre/backup-restore/.github/workflows/ci.yml@release/v5.0
+    uses: alexandreLamarre/backup-restore-operator/.github/workflows/ci.yml@release/v5.0
   goreleaser:
     needs: [
       ci
