@@ -13,7 +13,7 @@ else
 fi
 
 IMAGE=${REPO}/backup-restore-operator:${TAG}
-DOCKERFILE=package/Dockerfile
+DOCKERFILE=./Dockerfile
 if [ -e ${DOCKERFILE}.${ARCH} ]; then
     DOCKERFILE=${DOCKERFILE}.${ARCH}
 fi
