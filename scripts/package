@@ -13,7 +13,7 @@ mkdir -p dist/artifacts
 # fi
 
 IMAGE=${REPO}/backup-restore-operator:${TAG}
-DOCKERFILE=./Dockerfile
+DOCKERFILE=./package/Dockerfile
 if [ -e ${DOCKERFILE}.${ARCH} ]; then
     DOCKERFILE=${DOCKERFILE}.${ARCH}
 fi
