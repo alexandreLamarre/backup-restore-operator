@@ -2,6 +2,10 @@ name: Backup Restore CI
 
 on:
   push:
+    branches:
+      - release/v5.0
+      - release/v4.0
+      - release/v3.0
     paths-ignore:
       - 'docs/**'
       - '*.md'
