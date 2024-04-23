@@ -22,6 +22,7 @@ jobs:
     permissions:
       contents : read
       id-token: write
+      packages : write
     name : Build and push BRO images
     runs-on : ubuntu-latest
     steps:
