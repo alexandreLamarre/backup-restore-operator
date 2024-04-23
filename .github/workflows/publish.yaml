@@ -14,7 +14,7 @@ jobs:
   ci :
     uses: alexandreLamarre/backup-restore-operator/.github/workflows/ci.yaml@release/v5.0
     permissions:
-      content: read
+      contents: read
   push:
     permissions:
       contents : read
